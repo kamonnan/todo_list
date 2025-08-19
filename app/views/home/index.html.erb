@@ -1,60 +1,166 @@
-<section class="min-h-screen md:min-w-xl mx-auto">
-    <div class="bg-white p-8 md:p-12 rounded shadow">
-        <h1 class="text-amber-950 text-2xl font-bold mb-6 md:text-3xl">My Academy Quest</h1>
+<!-- ================== QUEST PAGE ================== -->
+<section class="quest">
+  <div class="quest-wrap">
+    <!-- HERO: รูป + ชื่อ + โลโก้ + ปุ่ม -->
+    <div class="quest-hero">
+      <div class="quest-photo">
+        <img src="https://github.com/kamonnan.png" alt="Kamonnan Wongpromboot">
+      </div>
 
-        <div class="flex justify-center">
-            <%= image_tag "https://github.com/kamonnan.png", alt: "Kamonnan Wongpromboot", class: "w-20 h-20 md:w-30 md:h-30 rounded-full shadow-md mb-4" %>
-        </div>
+      <div class="quest-hero-right">
+        <div class="quest-name">KAMONNAN WONGPROMBOOT</div>
 
-        <div class="flex justify-center">
-            <p class="text-lg mb-4 md:text-xl">Kamonnan Wongpromboot</p>
-        </div>
+        <h1 class="quest-logo">
+          <span class="quest-logo-nn">NN’S</span>
+          <span class="quest-logo-quest">QUEST</span>
+        </h1>
 
-        <div class="flex justify-center">
-            <%= link_to "My Brag Document", brag_path, class: "button text-blue-600 underline hover:text-blue-800 block mb-6" %>
+        <div class="quest-cta">
+          <%= link_to "BRAG DOCS ▷", brag_path, class: "quest-brag-btn" %>
         </div>
+      </div>
     </div>
-</section>
-<!-- Add Quest Form -->
-        <%= form_with model: @quest, url: quests_path, method: :post, local: true, class: "flex flex-col md:flex-row md:items-start md:gap-4 mb-6" do |form| %>
-        
-        <!-- Field + error -->
-        <div class="w-full md:flex-1 flex flex-col">
-            <%= form.text_field :title,
-                placeholder: "เพิ่มเควสต์ของฉัน",
-                class: "border px-3 py-2 rounded w-full #{'border-red-500' if @quest.errors[:title].any?}" %>
 
-            <% if @quest.errors[:title].any? %>
-            <p class="text-red-500 text-sm mt-1"><%= @quest.errors[:title].first %></p>
+    <!-- พื้นดินพิกเซล -->
+    <div class="quest-ground"></div>
+
+    <!-- ADD QUEST FORM -->
+    <%= form_with model: @quest, url: quests_path, method: :post, local: true, class: "quest-form" do |form| %>
+      <%= form.text_field :title, placeholder: "ADD SOME TO-DO LIST", class: "quest-input" %>
+      <%= form.submit "+ ADD TASK", class: "quest-add-btn", data: { testid: "submit-quest" } %>
+    <% end %>
+    <% if @quest && @quest.errors[:title].any? %>
+      <p class="quest-error"><%= @quest.errors[:title].first %></p>
+    <% end %>
+
+    <!-- LIST: งานที่ยังไม่เสร็จ -->
+    <ul class="quest-list">
+      <% @quests.each do |q| %>
+        <% done = (q.respond_to?(:completed?) && q.completed?) || (q.respond_to?(:done) && q.done) %>
+        <li class="quest-item <%= done ? 'is-done' : 'is-open' %>">
+          <div class="quest-item-left">
+            <% if done %>
+              <span class="quest-checkmark">✓</span>
+            <% else %>
+              <span class="quest-checkbox"></span>
             <% end %>
-        </div>
+            <label for="quest_<%= q.id %>" class="quest-item-label"><%= q.title %></label>
+          </div>
 
-        <!-- Button -->
-        <%= form.submit "เพิ่ม", 
-            class: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full md:w-auto mt-2 md:mt-0", 
-            data: { testid: "submit-quest" } %>
-        <% end %>
+          <button class="quest-del" title="Delete">✕</button>
+        </li>
+      <% end %>
+    </ul>
 
-        <!-- Quest List -->
-        <div>
-            <ul class="space-y-3">
-                <% @quests.each do |quest| %>
-                <li class="flex justify-between items-start bg-gray-100 px-4 py-3 rounded">
-                    <div class="flex items-start gap-3 flex-1 min-w-0">
-                    <label for="quest_<%= quest.id %>" 
-                        class="text-base md:text-lg break-words whitespace-normal overflow-hidden">
-                        <%= quest.title %>
-                    </label>
-                    </div>
-                    <!-- Check box and delete button only view -->
-                    <div class="flex justify-end items-center gap-3 shrink-0">
-	                    <input type="checkbox" id="quest_<%= quest.id %>" class="w-5 h-5">
-	                    <button class="group">
-                        <%= image_tag "delete_icon.svg", alt: "Delete", class: "w-6 h-6 group-hover:opacity-60 transition-opacity duration-100" %>
-	                    </button>
-                    </div>
-                    
-                </li>
-                <% end %>
-            </ul>
-        </div>
+    <!-- ฉากล่าง -->
+    <div class="quest-scene">
+      <%= image_tag "footer.svg", alt: "footer" %>
+    </div>
+  </div>
+</section>
+
+<!-- ================== STYLES (scoped) ================== -->
+<style>
+  :root{
+    --ink:#1B2060;
+    --sky:#C2EAFF;
+    --open:#CDEBFF;
+    --done:#242B74;
+    --accent:#FFE100; /* เหลืองพิกเซล */
+    --border:4px;
+    --radius:14px;
+  }
+
+  /* page */
+  .quest{min-height:100vh;background:var(--sky);font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;}
+  .quest-wrap{max-width:960px;margin:0 auto;padding:16px 16px 40px;}
+
+  /* hero */
+  .quest-hero{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
+  @media (min-width:640px){ .quest-hero{grid-template-columns:220px 1fr;gap:24px} }
+
+  .quest-photo{
+    background:#fff;border:var(--border) solid var(--ink);box-shadow:4px 4px 0 #0003;
+    padding:8px; aspect-ratio:1/1; position:relative; overflow:hidden;
+    clip-path:polygon(10% 0,90% 0,100% 10%,100% 90%,90% 100%,10% 100%,0 90%,0 10%); /* กรอบหยัก ๆ */
+  }
+  .quest-photo img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+
+  .quest-hero-right{display:flex;flex-direction:column;gap:10px}
+  .quest-name{color:var(--ink);font-weight:800;letter-spacing:.08em;text-align:right}
+
+  .quest-logo{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:2px 0}
+  .quest-logo-nn,
+  .quest-logo-quest{
+    display:inline-block;border:var(--border) solid var(--ink);box-shadow:4px 4px 0 #0004;padding:8px 14px;
+    line-height:1; font-weight:900; letter-spacing:.06em;
+  }
+  .quest-logo-nn{background:#fff;color:var(--ink)}
+  .quest-logo-quest{background:var(--accent);color:var(--ink)}
+
+  .quest-cta{display:flex;justify-content:flex-end}
+  .quest-brag-btn{
+    display:inline-block;background:#ECECFF;border:var(--border) solid var(--ink);border-radius:10px;
+    padding:10px 14px;font-weight:800;color:var(--ink);text-decoration:none;box-shadow:3px 3px 0 #0003;
+  }
+  .quest-brag-btn:active{transform:translate(1px,1px);box-shadow:2px 2px 0 #0003}
+
+  /* ground separator */
+  .quest-ground{
+    height:26px;margin:16px 0 18px;border-top:var(--border) solid var(--ink);
+    background:
+      linear-gradient(#4D3F3F,#4D3F3F) top/100% 6px no-repeat,
+      linear-gradient(90deg,#2E7B62 12px,transparent 12px) 0 6px/24px 10px repeat-x,
+      linear-gradient(#6E4B3A,#6E4B3A) bottom/100% 10px no-repeat;
+    box-shadow:0 4px 0 #0002 inset;border-radius:6px;
+  }
+
+  /* form */
+  .quest-form{display:flex;gap:12px;align-items:stretch}
+  .quest-input{
+    flex:1;background:#fff;border:var(--border) solid var(--ink);border-radius:var(--radius);
+    padding:12px 14px;font-weight:700;color:var(--ink);outline:none;
+  }
+  .quest-input::placeholder{color:#9aa4b2}
+  .quest-add-btn{
+    background:#D9D9E8;color:var(--ink);border:var(--border) solid var(--ink);
+    border-radius:12px;padding:12px 18px;font-weight:900;box-shadow:3px 3px 0 #0003;cursor:pointer;
+  }
+  .quest-add-btn:active{transform:translate(1px,1px);box-shadow:2px 2px 0 #0003}
+  .quest-error{color:#d92626;margin:6px 2px 0 2px;font-weight:700}
+
+  /* list */
+  .quest-list{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+  .quest-item{
+    display:flex;justify-content:space-between;align-items:center;
+    border:var(--border) solid var(--ink);border-radius:12px;padding:10px 12px;
+  }
+  .quest-item.is-open{background:var(--open)}
+  .quest-item.is-done{background:var(--done);color:#fff}
+
+  .quest-item-left{display:flex;align-items:center;gap:10px;min-width:0}
+  .quest-item-label{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .quest-item.is-done .quest-item-label{color:#fff}
+
+  .quest-checkbox{
+    width:22px;height:22px;background:#FFF34D;border:var(--border) solid var(--ink);border-radius:6px;display:inline-block
+  }
+  .quest-checkmark{font-size:22px;font-weight:900;color:#fff}
+
+  .quest-del{
+    width:32px;height:32px;display:grid;place-items:center;background:#FF4D5B;color:#fff;
+    border:var(--border) solid var(--ink);border-radius:999px;font-weight:900;cursor:pointer
+  }
+  .quest-del:active{transform:translate(1px,1px)}
+
+  /* bottom scene */
+  .quest-scene img{width:100%;height:auto;display:block;image-rendering:pixelated}
+
+  /* responsive tweaks */
+  @media (max-width:480px){
+    .quest-hero{grid-template-columns:120px 1fr}
+    .quest-logo-nn,.quest-logo-quest{padding:6px 10px}
+    .quest-input{padding:10px 12px}
+    .quest-add-btn{padding:10px 12px}
+  }
+</style>

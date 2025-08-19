@@ -1,0 +1,45 @@
+:root{
+  /* เส้นขอบ/สโตรก: โตตามจอแต่มีเพดาน */
+  --stroke: clamp(2px, 0.35vw, 6px);
+  --bg: #C2EAFF;
+  --ink: #1B2060;
+}
+
+/* layout */
+.brag_bg{
+  min-height: 100svh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* header spacing บนจอใหญ่ไม่ให้เว้นเยอะเกิน */
+.header{ padding: clamp(12px, 2vw, 28px); }
+
+/* โลโก้: จำกัดขนาดด้วย min() และใช้ margin คุมช่องไฟ */
+.logo_wrap{ display:flex; justify-content:center; margin: 0 clamp(12px, 2vw, 24px) clamp(16px, 3vw, 32px); }
+.logo{
+  width: min(44vw, 720px);   /* บนจอใหญ่จะคุมที่ ~44% หน้าจอ แต่ไม่เกิน 720px */
+  max-width: 92vw;           /* กันจอเล็กไม่ล้น */
+  height: auto;
+  display:block;
+  image-rendering: pixelated;
+}
+
+/* กล่องคอนเทนต์: กว้างพอดี ไม่ยืดเกินไปบนจอใหญ่ */
+.content{
+  width: min(70rem, 76vw);
+  background: #fff;
+  border-radius: clamp(8px, 0.8vw, 14px);
+  height: 100vh;
+  margin : 0 auto 5rem auto;
+}
+.contain{
+  padding: clamp(16px, 2vw, 32px);
+  display:flex; align-items:center; justify-content:center;
+  text-align:center;
+}
+
+
+.footer{ margin-top: auto; }
+.footer_img{ width:100%; height:auto; display:block; image-rendering: pixelated; }

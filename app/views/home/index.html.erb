@@ -16,7 +16,6 @@
     </div>
 </section>
 <!-- Add Quest Form -->
-<section>
         <%= form_with model: @quest, url: quests_path, method: :post, local: true, class: "flex flex-col md:flex-row md:items-start md:gap-4 mb-6" do |form| %>
         
         <!-- Field + error -->
@@ -59,4 +58,3 @@
                 <% end %>
             </ul>
         </div>
-</section>

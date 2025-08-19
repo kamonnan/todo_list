@@ -1,4 +1,22 @@
+<section class="min-h-screen md:min-w-xl mx-auto">
+    <div class="bg-white p-8 md:p-12 rounded shadow">
+        <h1 class="text-amber-950 text-2xl font-bold mb-6 md:text-3xl">My Academy Quest</h1>
+
+        <div class="flex justify-center">
+            <%= image_tag "https://github.com/kamonnan.png", alt: "Kamonnan Wongpromboot", class: "w-20 h-20 md:w-30 md:h-30 rounded-full shadow-md mb-4" %>
+        </div>
+
+        <div class="flex justify-center">
+            <p class="text-lg mb-4 md:text-xl">Kamonnan Wongpromboot</p>
+        </div>
+
+        <div class="flex justify-center">
+            <%= link_to "My Brag Document", brag_path, class: "button text-blue-600 underline hover:text-blue-800 block mb-6" %>
+        </div>
+    </div>
+</section>
 <!-- Add Quest Form -->
+<section>
         <%= form_with model: @quest, url: quests_path, method: :post, local: true, class: "flex flex-col md:flex-row md:items-start md:gap-4 mb-6" do |form| %>
         
         <!-- Field + error -->
@@ -41,3 +59,4 @@
                 <% end %>
             </ul>
         </div>
+</section>
